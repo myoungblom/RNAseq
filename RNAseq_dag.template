@@ -1,0 +1,37 @@
+JOB fastqc fastqc.submit
+VARS fastqc RUN="${run}"
+
+JOB trim trim.submit
+VARS trim RUN="${run}"
+SCRIPT POST trim check2outputs.sh ${run}_1_val_1.fq ${run}_2_val_2.fq 10M
+
+JOB bwa	bwaMEM.submit
+VARS bwa RUN="${run}"
+VARS bwa REF="${ref}"
+SCRIPT POST bwa removeIntermediates.sh ${run}.sam 10M ${run}_1.fastq ${run}_2.fastq
+
+JOB view samtools_view.submit
+VARS view RUN="${run}"
+SCRIPT POST view removeIntermediates.sh ${run}.bam 10M ${run}_1_unpaired_1.fq ${run}_2_unpaired_2.fq
+
+JOB sort samtools_sort.submit
+VARS sort RUN="${run}"
+SCRIPT POST sort removeIntermediates.sh ${run}.sort.bam 10M ${run}.sam ${run}.bam
+
+JOB qc qualimapQC.submit
+VARS qc RUN="${run}"
+VARS qc ANNOT_GTF="${annot_gtf}"
+
+JOB count htseq.submit
+VARS count RUN="${run}"
+VARS count ANNOT_GFF="${annot_gff}"
+
+JOB multiqc multiqc.submit
+VARS multiqc RUN="${run}"
+
+PARENT fastqc CHILD trim
+PARENT trim CHILD bwa
+PARENT bwa CHILD view
+PARENT view CHILD sort
+PARENT sort CHILD qc count
+PARENT qc CHILD multiqc

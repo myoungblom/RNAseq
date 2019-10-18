@@ -1,0 +1,17 @@
+universe = vanilla
+executable = qualimapQC.sh
+arguments = "$(RUN) $(ANNOT_GTF)"
+
+output = qualimap_$(RUN).out
+error = qualimap_$(RUN).err
+log = qualimap_$(RUN).log
+
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+transfer_input_files = $(RUN).sort.bam
+
+request_cpus = 4
+request_memory = 2GB
+request_disk = 2GB
+
+queue
