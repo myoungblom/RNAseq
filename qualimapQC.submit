@@ -1,10 +1,10 @@
 universe = vanilla
-executable = 
-arguments = "-ds ."
+executable = qualimapQC.sh
+arguments = "$(RUN) $(ANNOT_GTF)"
 
-output = htseq_$(RUN).out
-error = htseq_$(RUN).err
-log = htseq_$(RUN).log
+output = qualimap_$(RUN).out
+error = qualimap_$(RUN).err
+log = qualimap_$(RUN).log
 
 should_transfer_files = YES
 when_to_transfer_output = ON_EXIT

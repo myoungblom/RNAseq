@@ -18,6 +18,7 @@ def get_args():
     parser.add_argument('dagtemplate', help='Dag template')
     parser.add_argument('reference', help='Path to reference fasta file')
     parser.add_argument('gff', help='Path to GFF annotation file')
+    parser.add_argument('gtf', help='Path to GTF annotation file')
     
     return parser.parse_args()
 
@@ -35,6 +36,7 @@ with open(args.input, 'r') as infile:
             variableMap = {}
             variableMap['ref'] = args.reference
             variableMap['annot_gff'] = args.gff
+            variableMap['annot_gtf'] = args.gtf
             variableMap['run'] = inputList[0]
             with open('{0}_RNAseq.dag'.format(variableMap['run']), 'w') as dagfile:
                 out = template.substitute(variableMap)
