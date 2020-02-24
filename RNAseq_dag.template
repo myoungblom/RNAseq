@@ -18,9 +18,8 @@ JOB sort samtools_sort.submit
 VARS sort RUN="${run}"
 SCRIPT POST sort removeIntermediates.sh ${run}.sort.bam 10M ${run}.sam ${run}.bam
 
-JOB qc qualimapQC.submit
+JOB qc bamqc.submit
 VARS qc RUN="${run}"
-VARS qc ANNOT_GTF="${annot_gtf}"
 
 JOB count htseq.submit
 VARS count RUN="${run}"
