@@ -1,22 +1,21 @@
 JOB fastqc fastqc.submit
 VARS fastqc RUN="${run}"
 
-JOB trim trim.submit
+JOB trim trimmomatic.submit
 VARS trim RUN="${run}"
-SCRIPT POST trim check2outputs.sh ${run}_1_val_1.fq.gz ${run}_2_val_2.fq.gz 10M
+
+JOB fastqc2 fastqc.submit
+VARS fastqc2 RUN="${run}"
 
 JOB bwa	bwaMEM.submit
 VARS bwa RUN="${run}"
 VARS bwa REF="${ref}"
-SCRIPT POST bwa checkOutput_removeIntermediates.sh ${run}.sam 10M ${run}_1.fastq.gz ${run}_2.fastq.gz
 
 JOB view samtools_view.submit
 VARS view RUN="${run}"
-SCRIPT POST view checkOutput_removeIntermediates.sh ${run}.bam 10M ${run}.sam
 
 JOB sort samtools_sort.submit
 VARS sort RUN="${run}"
-SCRIPT POST sort checkOutput_removeIntermediates.sh ${run}.sort.bam 10M ${run}.bam
 
 JOB qc qualimapQC.submit
 VARS qc RUN="${run}"
@@ -27,7 +26,8 @@ VARS count RUN="${run}"
 VARS count ANNOT_GFF="${annot_gff}"
 
 PARENT fastqc CHILD trim
-PARENT trim CHILD bwa
+PARENT trim CHILD fastqc2
+PARENT fastqc2 CHILD bwa
 PARENT bwa CHILD view
 PARENT view CHILD sort
 PARENT sort CHILD qc count

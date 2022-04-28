@@ -5,7 +5,7 @@
 # will output a dag file for each sample.
 #####
 
-# Format for input file:
+# Format for input file: one sample name per line
 
 import sys
 import os
